@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View File</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>View File: {{ filename }}</h1>
+    <div class="viewer-container">
+        {% if file_extension in ['.txt', '.log'] %}
+        <pre>
+            {{ open(os.path.join('/mnt/nfs/fixed', filename)).read() }}
+        </pre>
+        {% elif file_extension in ['.mp4', '.mov'] %}
+        <video controls>
+            <source src="{{ url_for('download_file', filename=filename) }}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        {% else %}
+        <p>Preview not available for this file type.</p>
+        <a href="{{ url_for('download_file', filename=filename) }}">Download {{ filename }}</a>
+        {% endif %}
+    </div>
+    <a href="{{ url_for('index') }}" class="back-link">Back to List</a>
+</body>
+</html>

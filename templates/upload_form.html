@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Untrunc Web UI</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Untrunc Web UI</h1>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message {{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% endwith %}
+    
+    <!-- Upload Form -->
+    <table class="file-table">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>File</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Good File:</td>
+                <td>
+                    <form action="/untrunc" method="post" enctype="multipart/form-data" id="upload-form" onsubmit="showLoading()">
+                        <input type="file" name="good" id="good" required>
+                </td>
+            </tr>
+            <tr>
+                <td>Bad File:</td>
+                <td>
+                    <input type="file" name="bad" id="bad" form="upload-form" required>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: center;">
+                    <button type="submit" form="upload-form" class="submit-button">Repair</button>
+                    <button type="button" class="reset-button" onclick="resetForm()">Reset</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Fixed Files Table -->
+    <h2>Fixed Files</h2>
+    <table class="file-table">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Size (MB)</th>
+                <th>Date Created</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if files %}
+                {% for file in files %}
+                <tr>
+                    <td>{{ file.name }}</td>
+                    <td>{{ file.size }}</td>
+                    <td>{{ file.creation_time }}</td>
+                    <td>
+                        <a href="{{ url_for('view_file', filename=file.name) }}" class="view-link">View</a>
+                        <a href="{{ url_for('download_file', filename=file.name) }}" class="download-link">Download</a>
+                        <button onclick="deleteFile('{{ file.name }}', this.closest('tr'))" class="delete-button">Delete</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center;">No files found.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+        <p>Please wait, processing your files...</p>
+    </div>
+
+    <!-- Include the JavaScript file -->
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

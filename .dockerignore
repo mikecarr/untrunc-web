@@ -1,0 +1,11 @@
+Dockerfile
+.dockerignore
+untrunc
+untrunc-*
+ffmpeg-*
+.build_*
+build
+old
+
+nfs_share
+.venv

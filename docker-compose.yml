@@ -9,9 +9,11 @@ services:
     ports:
       - "5001:5001"  # Map port 5001 on the host to port 5001 in the container
     volumes:
-      - ./nfs_share:/mnt/nfs  # Mount the NFS share to /mnt/nfs inside the container
+      - ./shared:/app/shared
     environment:
       - FLASK_ENV=production  # Set Flask environment to production
+      - UPLOAD_FOLDER=/app/shared/uploads
+      - FIXED_FOLDER=/app/shared/fixed
     restart: unless-stopped  # Restart policy
 
 volumes:

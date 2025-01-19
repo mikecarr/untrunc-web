@@ -7,6 +7,13 @@
     border: 1px solid #ddd;
 }
 
+.section_heading {
+    text-align: center;
+    margin: 20px 0; /* Optional: Add spacing above and below */
+    font-size: 24px; /* Optional: Adjust font size */
+    color: #333; /* Optional: Adjust text color */
+}
+
 .file-table th,
 .file-table td {
     padding: 15px;

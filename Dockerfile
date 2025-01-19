@@ -18,17 +18,22 @@ RUN git clone https://github.com/anthwlock/untrunc.git && \
 	cp /untrunc/untrunc /usr/bin
 
 # Install Flask
-RUN pip install flask
+# Ensure shared folder exists in the container
+RUN mkdir -p /app/shared/uploads /app/shared/fixed
 
-# Create the directory for NFS mount
-RUN mkdir -p /mnt/nfs
+# Set environment variables
+ENV UPLOAD_FOLDER=/app/shared/uploads
+ENV FIXED_FOLDER=/app/shared/fixed
+
 
 # Copy the web app code
-COPY webapp/app.py /app/app.py
-COPY templates /app/templates
-COPY static /app/static
+COPY webapp /webapp
+# COPY templates /app/templates
+# COPY static /app/static
 
-WORKDIR /app
+WORKDIR /webapp
+
+RUN pip install -r requirements.txt
 
 # Expose the port the app runs on
 EXPOSE 5001

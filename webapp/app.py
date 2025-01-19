@@ -1,14 +1,26 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory, redirect, url_for, flash
+
 import subprocess
 import os
 import re
 import time
 import shutil
+import logging
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # Required for flash messages
-UPLOAD_FOLDER = "/mnt/nfs"
-FIXED_FOLDER = os.path.join(UPLOAD_FOLDER, "fixed")
+
+# Base directory of the project
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
+
+# Shared folder configuration
+SHARED_FOLDER = os.path.join(BASE_DIR, "shared")
+UPLOAD_FOLDER = os.path.join(SHARED_FOLDER, "uploads")
+FIXED_FOLDER = os.path.join(SHARED_FOLDER, "fixed")
+
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['FIXED_FOLDER'] = FIXED_FOLDER
 
@@ -108,6 +120,16 @@ def view_file(filename):
     file_extension = os.path.splitext(filename)[1].lower()
 
     return render_template('viewer.html', filename=filename, file_extension=file_extension)
+
+# @app.route('/view/<filename>')
+# def view_file(filename):
+#     try:
+#         logging.debug(f"Attempting to serve file: {os.path.join(app.config['FIXED_FOLDER'], filename)}")
+#         return send_from_directory(app.config['FIXED_FOLDER'], filename)
+#     except FileNotFoundError:
+#         logging.error(f"File not found: {filename}")
+#         return f"File {filename} not found", 404
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001)

@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>Untrunc Web UI</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Untrunc Web UI</h1>
+    <div class="section_heading">Untrunc Web UI</div>
+
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         <div class="flash-messages">
@@ -49,7 +51,8 @@
     </table>
 
     <!-- Fixed Files Table -->
-    <h2>Fixed Files</h2>
+    <div class="section_heading">Fixed Files</div>
+    
     <table class="file-table">
         <thead>
             <tr>
